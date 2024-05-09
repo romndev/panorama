@@ -1,0 +1,268 @@
+<head>
+    <meta charset="utf-8">
+    <!-- for optimal display on high DPI devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.css" />
+
+</head>
+
+<!-- the viewer container must have a defined size -->
+<div id="viewer" style="width: 100vw; height: 100vh;"></div>
+
+<div id="marker" class="marker-text-notice">
+    Управление на руле
+</div>
+
+<div id="sound" class="button-marker" style="background-image: url('./img/sound1.png')"></div>
+<div id="sound2" class="button-marker" style="background-image: url('./img/sound1.png')"></div>
+<div id="backseat" class="button-marker" style="background-image: url('./img/passanger.png')"></div>
+<div id="console">
+    <div class="button-marker-group">
+        <div class="button-marker" style="background-image: url('./img/speeds.png')"></div>
+        <!--div style="color: #fff; font-weight: bold">Панель управления</div-->
+    </div>
+</div>
+
+
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+            "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.module.js",
+            "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5.7.3/index.module.js",
+            "@photo-sphere-viewer/autorotate-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/autorotate-plugin@5.7.3/index.module.js"
+        }
+    }
+</script>
+
+<style>
+    #marker{
+        color: #000;
+    }
+
+    .marker-text-notice{
+        position: relative;
+    }
+
+    .marker-text-notice::after{
+        content: '';
+        position: absolute;
+        width: 110%;
+        height: 2px;
+        background: black;
+        left: -5%;
+        bottom: -5px;
+    }
+    .marker-text-notice::before{
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 2px;
+        background: black;
+        left: -5%;
+        bottom: -5px;
+        transform-origin: 0% 0%;
+        transform: rotate(135deg);
+    }
+    .line{
+        border-bottom: 2px solid #000000;
+        width: 100%;
+    }
+    .subline{
+        display: block;
+        width: 70px;
+        border-bottom: 2px solid #000000;
+        margin-left:-50%;
+        margin-top: 23px;
+        transform: rotate(-45deg);
+    }
+
+    .button-marker-group{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .button-marker{
+        position: relative;
+        width: 70px;
+        height: 70px;
+        border-radius: 100px;
+        background-image: url("./img/sound1.png");
+        border: 1px solid #b9b9b9;
+        background-size: contain;
+    }
+
+    .button-marker::before{
+        content: '';
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        border-radius: 100px;
+        background: radial-gradient(circle, rgba(68,107,137,1) 50%, rgba(25,39,51,1) 100%);
+    }
+
+    .button-marker::after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        border-radius: 100px;
+        box-shadow: 0 0 10px 1px #fff;
+        transition: opacity 0.3s ease-in-out;
+
+        animation-duration: 1s;
+        animation-name: opacity;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+
+    @keyframes opacity {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+
+<script type="module">
+    import { Viewer } from '@photo-sphere-viewer/core';
+    import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
+    import { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';
+
+    const viewer = new Viewer({
+        container: document.querySelector('#viewer'),
+        panorama: './pano1.jpg',
+        defaultZoomLvl: 0,
+        defaultYaw: -0.6,
+        defaultPitch: -0.4,
+        plugins: [
+            // [AutorotatePlugin, {
+            //     autostartOnIdle: true,
+            //     autostartDelay: 1000,
+            //     autorotateSpeed: '0.3rpm',
+            // }],
+            [MarkersPlugin, {
+                markers: [
+                    {
+                        // html marker with custom style
+                        id: 'text2',
+                        position: { yaw: 2.4, pitch: 0.1 },
+                        html: "Ароматизатор",
+                        anchor: 'bottom left',
+                        style:{
+                            color: "#fff",
+                            "font-size": "25px",
+                            "font-weight": "bold",
+                            "font-family": "Helvetica",
+                        },
+                        scale: {
+                            zoom: [0.5, 1],
+                        },
+                    },
+                    {
+                        // html marker with custom style
+                        id: 'text',
+                        position: { yaw: -0.6, pitch: -0.3 },
+                        "image": "./img/wheel.png",
+                        anchor: 'bottom left',
+                        "size": {
+                            "width": "500",
+                            "height": "250"
+                        },
+                        scale: {
+                            zoom: [0.5, 1],
+                        },
+                        // tooltip: {
+                        //     content: 'An HTML marker',
+                        //     position: 'right',
+                        // },
+                    },
+                    {
+                        "id": "marker-6eowds7yrzr",
+                        "image": "./img/media.png",
+                        "position": {
+                            yaw: 0, pitch: -0.35,
+                        },
+                        scale: {
+                            zoom: [0.5, 1],
+                        },
+                        "size": {
+                            "width": "500",
+                            "height": "250"
+                        },
+                        "anchor": "bottom left"
+                    },
+                    {
+                        // html marker with custom style
+                        id: 'sound',
+                        position: { yaw: 0.85, pitch: -0.30 },
+                        element: document.querySelector('#sound'),
+                        anchor: 'bottom left',
+                        tooltip: {
+                            content: 'Sound system',
+                            position: 'right',
+                        },
+                    },
+                    {
+                        // html marker with custom style
+                        id: 'sound2',
+                        position: { yaw: -0.85, pitch: -0.30 },
+                        element: document.querySelector('#sound2'),
+                        anchor: 'bottom left',
+                        tooltip: {
+                            content: 'Sound system',
+                            position: 'left',
+                        },
+                    },
+                    {
+                        // html marker with custom style
+                        id: 'backseat',
+                        position: { yaw: -2.8, pitch: -0.4 },
+                        element: document.querySelector('#backseat'),
+                        anchor: 'bottom left',
+                        tooltip: {
+                            content: 'Passenger',
+                            position: 'left',
+                        },
+                    },
+                    {
+                        // html marker with custom style
+                        id: 'console',
+                        position: { yaw: 0, pitch: -0.8 },
+                        element: document.querySelector('#console'),
+                        anchor: 'bottom',
+                        tooltip: {
+                            content: 'Sound system',
+                            position: 'right',
+                        },
+                        content: "<img src='./img/img.png' style='width:100%'><br><div style='color:#fff'>Коро́бка переда́ч (также коробка) — механизм, применяемый в основном в автомобилях, для изменения передаточного отношения. Элемент трансмиссии колёсных и гусеничных транспортных средств, предназначенный для расширения диапазона частоты вращения и крутящего момента применяемого двигателя, возможности реверсивного движения, длительного отсоединения работающего двигателя от трансмиссии. По конструкции обычно представляет собой отдельный агрегат, в корпусе (картере) которого находятся те или иные механические передачи вращательного движения, осуществляющие разнонаправленную редукцию потока мощности в пределах некоего диапазона по фиксированным передаточным отношениям (передачам) на выбор. В случае двигателя внутреннего сгорания входит в состав трансмиссии практически обязательно, но может быть заменена вариатором. Как правило, не применяется в трансмиссиях транспортных средств с паровыми или электрическими двигателями, имеющими высокую приспособляемость и гиперболическую (у паровых) или параболическую (у электродвигателей постоянного тока) тяговую характеристику.</div>"
+                    },
+                    // {
+                    //     "id": "marker-sound",
+                    //     "image": "./img/sound.png",
+                    //     "position": {
+                    //         yaw: 0.8, pitch: -0.35,
+                    //     },
+                    //     "size": {
+                    //         "width": "100",
+                    //         "height": "100"
+                    //     },
+                    //     "anchor": "bottom left"
+                    // }
+
+                ]
+            }],
+        ],
+    });
+</script>
